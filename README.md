@@ -1,30 +1,34 @@
 ## A Tensorflow 1.15 Implementation of Training Deeplab v3 via Cityscapes Dataset
 
-This script is for training the a Deeplabv3-Semantic-Segmentation model using Cityscapes dataset. 
+This script is for training a Deeplabv3-Semantic-Segmentation model using Cityscapes dataset. 
 
 Reference: [Running DeepLab on Cityscapes semantic segmentation dataset.](https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/cityscapes.md)
 
 DL framework is:
 - Tensorflow-gpu==1.15.0
 - Python == 3.6
+- CUDA >= 11.0, <= 11.4 (e.g., 11.2)
+
+Check the reference [Here](https://www.tensorflow.org/install/source#linux) and see if your CUDA version is compatible with your Tensorflow version. Otherwise, the training may run on your CPUs rather than GPUs.  
+
 
 ### 1 - Setup
 - Clone the repo, setup the virtual env
 ```angular2html
 
-git clone https://github.com/tensorflow/models.git
-cd models/research/deeplab
+git clone https://github.com/YHDING23/TF1_DEEPLABv3.git TF1_Deeplabv3
+cd TF1_Deeplabv3
 
 mkdir venv
 virtualenv -p python3.6 venv
 source venv/bin/activate
-install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ### 2 - Prepare the dataset. 
-We have a copy of TFRecord of cityscapes located in our NFS server `nfs_3/tf_records/cityscapes_tfrecord`. If you are using the same capy, skip this section. 
+We have a copy of TFRecord from the cityscapes dataset located in our NFS server `nfs_3/tf_records/cityscapes_tfrecord/`. If you are using the same copy, skip this section. 
 
-If you are using the original images of cityscapes, check the file [convert_cityscapes.sh](https://github.com/tensorflow/models/blob/master/research/deeplab/datasets/convert_cityscapes.sh) The folder structure is assumed to be:
+If you are using the original images of cityscapes, check the file [convert_cityscapes.sh](https://github.com/tensorflow/models/blob/master/research/deeplab/datasets/convert_cityscapes.sh). Your folder structure is assumed to be:
 ```angular2html
 + datasets
 #    - build_cityscapes_data.py
@@ -37,7 +41,7 @@ If you are using the original images of cityscapes, check the file [convert_city
 ```
 Regarding this scirpt, only three major folders are used: `cityscapesscripts/`, `gtFine/` and `leftImg8bit`.  Otherwise, you can download the data from the official website. 
 
-- Covert the dataset to TFRecord, and it takes 15 mins
+- Covert the dataset to TFRecord will take about 15 mins.
 ```angular2html
 sh convert_cityscapes.sh
 ```
@@ -51,13 +55,13 @@ Reference at https://github.com/tensorflow/models/blob/master/research/deeplab/g
 export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
 ```
 
-### 4 - Pickup model and Train
+### 4 - Pickup Model and Train
 
 Reference at https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/model_zoo.md
 
 Example: I pickup the pretrained checkpoint name: `xception65_coco_voc_trainaug`.
 ```angular2html
-# from tensorflow/models/research/deeplab
+# from TF1_Deeplabv3/
 mkdir log
 mkdir pretrain
 cd pretrain
